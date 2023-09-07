@@ -1,16 +1,16 @@
 import { toast } from "react-toastify";
 import {
-  getAdminDisplay,
-  getAdminInfo,
+  getUserDisplay,
+  getUserInfo,
   getNewRefreshJWT,
-  postNewAdmin,
-  signInAdmin,
-  updateAdminProfile,
-} from "../../helper/axios";
-import { setAdmin, setAdmins } from "./adminSlice";
+  postNewUser,
+  signInUser,
+  updateUserProfile,
+} from "../../pages/helper/axios.js";
+import { setUser, setUsers } from "./userSlice";
 
-export const createNewAdminAction = async (obj) => {
-  const pendingResp = postNewAdmin(obj);
+export const createNewUserAction = async (obj) => {
+  const pendingResp = postNewUser(obj);
 
   toast.promise(pendingResp, {
     pending: "Please await..",
@@ -19,8 +19,8 @@ export const createNewAdminAction = async (obj) => {
   toast[status](message);
 };
 
-export const signInAdminAction = (obj) => async (dispatch) => {
-  const pendingResp = signInAdmin(obj);
+export const signInUserAction = (obj) => async (dispatch) => {
+  const pendingResp = signInUser(obj);
 
   toast.promise(pendingResp, {
     pending: "Please await..",
@@ -33,41 +33,41 @@ export const signInAdminAction = (obj) => async (dispatch) => {
     sessionStorage.setItem("accessJWT", token.accessJWT);
     localStorage.setItem("refreshJWT", token.refreshJWT);
 
-    dispatch(getAdminProfileAction());
+    dispatch(getUserProfileAction());
   }
 
   //get the user data and mount in the state
 };
 
 //get admin profile
-export const getAdminProfileAction = () => async (dispatch) => {
+export const getUserProfileAction = () => async (dispatch) => {
   //call the api to get user info
-  const { status, user } = await getAdminInfo();
+  const { status, user } = await getUserInfo();
   //mount the state with the user data
 
   if (status === "success") {
-    dispatch(setAdmin(user));
+    dispatch(setUser(user));
   }
 };
 
 ////// get all the admin
-export const getAdminDisplayAction = () => async (dispatch) => {
+export const getUserDisplayAction = () => async (dispatch) => {
   // call the api to get user info
-  const { status, user } = await getAdminDisplay();
+  const { status, user } = await getUserDisplay();
 
   //mount the state with the user data, setAdmin() form adminSlice
   if (status === "success") {
-    dispatch(setAdmins(user));
+    dispatch(setUsers(user));
   }
 };
 
 // New action for updating admin profile
 export const updateProfileUser = (userObj) => async (dispatch) => {
-  const pendingResp = updateAdminProfile(userObj);
+  const pendingResp = updateUserProfile(userObj);
   toast.promise(pendingResp, { Pending: "Please Wait" });
   const { status, message } = await pendingResp;
   toast[status](message);
-  dispatch(getAdminProfileAction());
+  dispatch(getUserProfileAction());
 };
 
 export const autoLogin = () => async (dispatch) => {
@@ -75,7 +75,7 @@ export const autoLogin = () => async (dispatch) => {
 
   const accessJWT = sessionStorage.getItem("accessJWT");
   if (accessJWT) {
-    return dispatch(getAdminProfileAction());
+    return dispatch(getUserProfileAction());
   }
 
   const refreshJWT = localStorage.getItem("refreshJWT");
@@ -86,7 +86,7 @@ export const autoLogin = () => async (dispatch) => {
 
     if (accessJWT) {
       sessionStorage.setItem("accessJWT", accessJWT);
-      dispatch(getAdminProfileAction());
+      dispatch(getUserProfileAction());
     }
   }
 };

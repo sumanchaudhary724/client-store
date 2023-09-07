@@ -6,9 +6,9 @@ const SignUp = () => {
   return (
     <div>
       <Header />
-      <mian className="main">
+      <main className="main">
         <UserSignup />
-      </mian>
+      </main>
     </div>
   );
 };

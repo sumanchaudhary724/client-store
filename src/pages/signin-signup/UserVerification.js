@@ -3,11 +3,11 @@ import { Header } from "../../components/layout/Header";
 import { Footer } from "../../components/layout/Footer";
 import Spinner from "react-bootstrap/Spinner";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { postNewAdminVerificationInfo } from "../../helper/axios";
+import { postNewUserVerificationInfo } from "../../helper/axios";
 import { toast } from "react-toastify";
 import { Alert, Container } from "react-bootstrap";
 
-const AdminVerification = () => {
+const UserVerification = () => {
   const [queryStrings] = useSearchParams();
   const navigate = useNavigate();
   const c = queryStrings.get("c");
@@ -22,7 +22,7 @@ const AdminVerification = () => {
 
   useEffect(() => {
     // callAPI &&
-    postNewAdminVerificationInfo({ c, e }).then((resp) => {
+    postNewUserVerificationInfo({ c, e }).then((resp) => {
       setResp(resp);
       setShowSpinner(false);
       toast[resp.status](resp.message);
@@ -56,4 +56,4 @@ const AdminVerification = () => {
   );
 };
 
-export default AdminVerification;
+export default UserVerification;

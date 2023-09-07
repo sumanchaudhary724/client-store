@@ -81,7 +81,7 @@ export const getUserInfo = () => {
   return axiosProcessor(obj);
 };
 
-export const getAdminDisplay = () => {
+export const getUserDisplay = () => {
   const obj = {
     method: "get",
     url: userAPI + "/display",
@@ -90,7 +90,7 @@ export const getAdminDisplay = () => {
   return axiosProcessor(obj);
 };
 
-export const postNewAdmin = (data) => {
+export const postNewUser = (data) => {
   const obj = {
     method: "post",
     url: userAPI,
@@ -98,7 +98,7 @@ export const postNewAdmin = (data) => {
   };
   return axiosProcessor(obj);
 };
-export const signInAdmin = (data) => {
+export const signInUser = (data) => {
   const obj = {
     method: "post",
     url: userAPI + "/sign-in",
@@ -106,7 +106,7 @@ export const signInAdmin = (data) => {
   };
   return axiosProcessor(obj);
 };
-export const postNewAdminVerificationInfo = (data) => {
+export const postNewUserVerificationInfo = (data) => {
   const obj = {
     method: "post",
     url: userAPI + "/user-verification",
@@ -164,7 +164,7 @@ export const getNewRefreshJWT = () => {
   };
   return axiosProcessor(obj);
 };
-export const logoutAdmin = (_id) => {
+export const logoutUser = (_id) => {
   const obj = {
     method: "post",
     url: userAPI + "/logout",
@@ -275,7 +275,7 @@ export const resetPass = (data) => {
   return axiosProcessor(obj);
 };
 
-export const updateAdminProfile = async (data) => {
+export const updateUserProfile = async (data) => {
   const obj = {
     method: "put",
     url: userAPI,

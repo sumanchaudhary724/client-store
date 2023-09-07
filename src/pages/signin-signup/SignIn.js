@@ -4,7 +4,7 @@ import { Footer } from "../../components/layout/Footer";
 import { Button, Form } from "react-bootstrap";
 import { CustomInput } from "../../components/custom-input/CustomInput";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { autoLogin, signInAdminAction } from "./adminAction";
+import { autoLogin, signInUserAction } from "./userAction";
 import { useDispatch, useSelector } from "react-redux";
 
 const initialState = {
@@ -17,13 +17,13 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form, setForm] = useState(initialState);
-  const { admin } = useSelector((state) => state.adminInfo);
+  const { user } = useSelector((state) => state.userInfo);
 
   const pathTo = location.state?.from?.location?.pathname || "/dashboard";
   useEffect(() => {
-    admin?._id && navigate(pathTo);
+    user?._id && navigate(pathTo);
     dispatch(autoLogin());
-  }, [admin, navigate, dispatch, pathTo]);
+  }, [user, navigate, dispatch, pathTo]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +36,7 @@ const SignIn = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    dispatch(signInAdminAction(form));
+    dispatch(signInUserAction(form));
   };
 
   return (
