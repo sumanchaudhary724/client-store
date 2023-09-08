@@ -72,6 +72,14 @@ const axiosProcessor = async ({
 };
 
 // ========= admin api
+export const getUserInfo = () => {
+  const obj = {
+    method: "get",
+    url: userAPI,
+    isPrivate: true,
+  };
+  return axiosProcessor(obj);
+};
 
 export const getUserDisplay = () => {
   const obj = {
