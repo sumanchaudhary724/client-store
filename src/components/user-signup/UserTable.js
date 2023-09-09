@@ -1,21 +1,21 @@
 import React, { useEffect } from "react";
 import { Form, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getAdminDisplayAction } from "../../pages/signin-signup/adminAction";
+import { getUserDisplayAction } from "../../pages/signin-signup/userAction";
 
-export const AdminTable = () => {
+export const UserTable = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAdminDisplayAction());
+    dispatch(getUserDisplayAction());
   }, [dispatch]);
 
-  const { adminList } = useSelector((state) => state.adminInfo);
+  const { userList } = useSelector((state) => state.userInfo);
 
   return (
     <div className="mt-5">
       <div className="d-flex justify-content-between mb-3">
-        <div>{adminList.length} Admins found</div>
+        <div>{userList.length} Users found</div>
         <div>
           <Form.Control type="text" placeholder="search by Admin name" />
         </div>
@@ -30,7 +30,7 @@ export const AdminTable = () => {
             <th>Email</th>
           </tr>
         </thead>
-        {adminList.map((item, i) => (
+        {userList.map((item, i) => (
           <tr key={item._id}>
             <td>{i + 1}</td>
             <td>{item.fName}</td>

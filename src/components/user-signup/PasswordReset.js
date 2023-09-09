@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { CustomInput } from "../custom-input/CustomInput";
 import { toast } from "react-toastify";
-import { resetPass } from "../../helper/axios";
 
 export const PasswordReset = ({ setForm, processResetPassAPI }) => {
   const [formDt, setFormDt] = useState({});

@@ -4,9 +4,9 @@ import { Footer } from "./Footer";
 import { Container } from "react-bootstrap";
 import { Sidebar } from "../sidebar/Sidebar";
 
-export const AdminLayout = ({ children, title }) => {
+export const UserLayout = ({ children, title }) => {
   return (
-    <div className="admin-layout">
+    <div className="user-layout">
       <Sidebar />
       <main className="main">
         <Header />

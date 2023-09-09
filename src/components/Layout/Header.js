@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import { logoutUser } from "../../pages/helper/axios";
+import { logoutUser } from "../../helper/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../pages/signin-signup/userSlice";
 

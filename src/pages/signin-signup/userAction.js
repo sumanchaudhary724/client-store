@@ -6,7 +6,7 @@ import {
   postNewUser,
   signInUser,
   updateUserProfile,
-} from "../../pages/helper/axios.js";
+} from "../../helper/axios";
 import { setUser, setUsers } from "./userSlice";
 
 export const createNewUserAction = async (obj) => {

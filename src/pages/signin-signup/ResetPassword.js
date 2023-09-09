@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Footer } from "../../components/layout/Footer";
 import { Header } from "../../components/layout/Header";
-import { PasswordOTP } from "../../components/admin-signup/PasswordOTP";
-import { PasswordReset } from "../../components/admin-signup/PasswordReset";
+import { PasswordOTP } from "../../components/user-signup/PasswordOTP";
+import { PasswordReset } from "../../components/user-signup/PasswordReset";
 import { requestPassOTP, resetPass } from "../../helper/axios";
 import { toast } from "react-toastify";
 import { Alert, Container } from "react-bootstrap";

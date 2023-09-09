@@ -5,9 +5,9 @@ import { Navigate, useLocation } from "react-router-dom";
 export const PrivateRoute = ({ children }) => {
   const location = useLocation();
 
-  const { admin } = useSelector((state) => state.adminInfo);
+  const { user } = useSelector((state) => state.userInfo);
 
-  return admin?._id ? (
+  return user?._id ? (
     children
   ) : (
     <Navigate

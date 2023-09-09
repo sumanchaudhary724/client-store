@@ -1,38 +1,35 @@
-.App {
-  text-align: center;
+.main {
+  min-height: 83vh;
+  background: rgba(205, 225, 255, 0.729);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.user-layout {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+.user-layout .side-bar {
+  width: 230px;
+  position: fixed;
+  height: 100vh;
+}
+.user-layout .main {
+  margin-left: 230px;
+  width: calc(100vw - 230px);
 }
 
-.App-link {
-  color: #61dafb;
+.page-content {
+  min-height: 83vh;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.sid-nav li {
+  line-height: 3rem;
+  font-weight: 600;
+  /* font-size: 1.3rem; */
+}
+
+.reset-pass form {
+  width: 450px;
+  margin: auto;
+  box-shadow: -5px 5px 10px grey;
+  padding: 1rem;
+  border-radius: 10px;
 }
