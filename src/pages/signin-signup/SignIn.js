@@ -4,7 +4,7 @@ import { Footer } from "../../components/layout/Footer";
 import { Button, Form } from "react-bootstrap";
 import { CustomInput } from "../../components/custom-input/CustomInput";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { autoLogin, signInUserAction } from "./userAction";
+import { autoLogin, loginUserAction } from "./userAction";
 import { useDispatch, useSelector } from "react-redux";
 
 const initialState = {
@@ -36,7 +36,7 @@ const SignIn = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    dispatch(signInUserAction(form));
+    dispatch(loginUserAction(form));
   };
 
   return (
