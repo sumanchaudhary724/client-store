@@ -22,6 +22,14 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="products"
+          element={
+            <PrivateRoute>
+              <Products />
+            </PrivateRoute>
+          }
+        />
         <Route path="/" element={<SignIn />} />
         <Route path="user-verification" element={<UserVerification />} />
         <Route path="password-rest" element={<ResetPassword />} />
