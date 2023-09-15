@@ -1,7 +1,7 @@
 import {
   getUser,
   getNewAccessJWT,
-  loginUser,
+  signInUser,
   postNewUser,
   updateUser,
   verifyAccount,
@@ -29,8 +29,8 @@ export const updateUserAction = (userObj) => async (dispatch) => {
     return true;
   }
 };
-export const loginUserAction = (userData) => async (dispatch) => {
-  const pendingResp = loginUser(userData);
+export const SignInUserAction = (userData) => async (dispatch) => {
+  const pendingResp = signInUser(userData);
   toast.promise(pendingResp, { Pending: "Please Wait" });
 
   const { status, message, token } = await pendingResp;

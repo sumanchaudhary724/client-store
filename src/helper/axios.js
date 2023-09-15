@@ -103,11 +103,11 @@ export const getUser = () => {
   return axiosProcessor(obj);
 };
 
-export const loginUser = (logInData) => {
+export const signInUser = (data) => {
   const obj = {
     method: "post",
-    url: userAPI + "/login",
-    obj: logInData,
+    url: userAPI + "/sign-in",
+    obj: data,
   };
   return axiosProcessor(obj);
 };

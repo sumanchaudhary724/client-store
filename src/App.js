@@ -7,12 +7,21 @@ import UserVerification from "./pages/signin-signup/UserVerification";
 import { PrivateRoute } from "./components/private/PrivateRoute";
 import ResetPassword from "./pages/signin-signup/ResetPassword";
 import "./App.css";
+import { Dashboard } from "./pages/dashboard/Dashboard";
 
 function App() {
   return (
     <div className="">
       <Routes>
         {/* public routers */}
+        <Route
+          path="dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
         <Route path="/" element={<SignIn />} />
         <Route path="user-verification" element={<UserVerification />} />
         <Route path="password-rest" element={<ResetPassword />} />
