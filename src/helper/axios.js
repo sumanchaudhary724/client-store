@@ -2,6 +2,8 @@ import axios from "axios";
 
 const rootAPI = process.env.REACT_APP_ROOTAPI;
 const userAPI = rootAPI + "/user";
+const catApi = rootAPI + "/catagory";
+const productApi = rootAPI + "/product";
 
 const getAccessJWt = () => {
   return sessionStorage.getItem("accessJWT");
@@ -168,6 +170,30 @@ export const changePassword = (formObj) => {
     method: "post",
     url: userAPI + "/change-password",
     obj: formObj,
+  };
+  return axiosProcessor(obj);
+};
+
+//category and product
+export const getCatagories = async () => {
+  const obj = {
+    method: "get",
+    url: catApi,
+  };
+  return axiosProcessor(obj);
+};
+
+export const getProducts = async (object) => {
+  const obj = {
+    method: "get",
+    url: !object ? productApi : productApi + `/${object?.slug}`,
+  };
+  return axiosProcessor(obj);
+};
+export const getProductsByCat = async (object) => {
+  const obj = {
+    method: "get",
+    url: productApi + `/catagories` + `/${object?._id}`,
   };
   return axiosProcessor(obj);
 };

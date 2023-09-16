@@ -8,6 +8,7 @@ import { PrivateRoute } from "./components/private/PrivateRoute";
 import ResetPassword from "./pages/signin-signup/ResetPassword";
 import "./App.css";
 import { Dashboard } from "./pages/dashboard/Dashboard";
+import { productPage } from "./pages/product/productPage";
 
 function App() {
   return (
@@ -22,14 +23,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="products"
-          element={
-            <PrivateRoute>
-              <Products />
-            </PrivateRoute>
-          }
-        />
+        <Route path={"product/:slug/"} element={<productPage />} />
         <Route path="/" element={<SignIn />} />
         <Route path="user-verification" element={<UserVerification />} />
         <Route path="password-rest" element={<ResetPassword />} />

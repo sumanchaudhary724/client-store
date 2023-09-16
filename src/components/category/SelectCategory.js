@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 export const SelectedCategory = (props) => {
-  const { catalogue } = useSelector((store) => store.catagoryInfo);
+  const { category } = useSelector((store) => store.catagoryInfo);
 
   return (
     <>
@@ -11,7 +11,7 @@ export const SelectedCategory = (props) => {
         <Form.Select {...props}>
           <option value="">...Select...</option>
 
-          {catalogue.map(({ _id, title }) => (
+          {category.map(({ _id, title }) => (
             <option key={_id} value={_id} selected={_id === props._id}>
               {title}
             </option>
