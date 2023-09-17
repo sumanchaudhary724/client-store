@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { Alert, CardHeader, Snackbar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItemFromCart, setCart } from "../../pages/cart/cartSlice";
-import { addTofavAction } from "../../action/userAction";
+import { addTofavAction } from "../../pages/signin-signup/userAction";
 import { motion } from "framer-motion";
 export default function CustomProductCard({ products }) {
   const { user } = useSelector((store) => store.userInfo);

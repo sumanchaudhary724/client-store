@@ -6,6 +6,7 @@ import catReducer from "./pages/category/categorySlice.js";
 import presistedCartReducer from "./pages/cart/cartSlice.js";
 import mainCatalogueReducer from "./pages/mainCategory/mainCatSlice.js";
 import modalReducer from "./components/modal/modalSlice.js";
+import displayReducer from "./pages/display/displayDataSlice.js";
 export default configureStore({
   reducer: {
     system: systemReducer,

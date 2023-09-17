@@ -1,4 +1,5 @@
 import {
+  addToFav,
   getUser,
   getNewAccessJWT,
   signInUser,
@@ -79,4 +80,12 @@ export const autoLogin = () => async (dispatch) => {
     }
     dispatch(getUserProfileAction());
   }
+};
+
+export const addTofavAction = (obj) => async (dispatch) => {
+  const result = await addToFav(obj);
+  if (result.status === "success") {
+    dispatch(getUserProfileAction());
+  }
+  return result;
 };

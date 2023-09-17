@@ -2,7 +2,7 @@ import axios from "axios";
 
 const rootAPI = process.env.REACT_APP_ROOTAPI;
 const userAPI = rootAPI + "/user";
-const catApi = rootAPI + "/catagory";
+const catApi = rootAPI + "/category";
 const productApi = rootAPI + "/product";
 
 const getAccessJWt = () => {
@@ -175,7 +175,7 @@ export const changePassword = (formObj) => {
 };
 
 //category and product
-export const getCatagories = async () => {
+export const getCategories = async () => {
   const obj = {
     method: "get",
     url: catApi,
@@ -193,7 +193,17 @@ export const getProducts = async (object) => {
 export const getProductsByCat = async (object) => {
   const obj = {
     method: "get",
-    url: productApi + `/catagories` + `/${object?._id}`,
+    url: productApi + `/categories` + `/${object?._id}`,
+  };
+  return axiosProcessor(obj);
+};
+
+export const addToFav = async (object) => {
+  const obj = {
+    method: "POST",
+    url: `${userAPI}/addFav`,
+    obj: object,
+    isPrivate: true,
   };
   return axiosProcessor(obj);
 };

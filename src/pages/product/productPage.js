@@ -21,7 +21,7 @@ import { AddToFav } from "../../components/products/AddToFav";
 import { YouMayLike } from "../../components/products/YouMayLike";
 import { LandingPageImage } from "../../components/products/LandingPageImage";
 
-export const productPage = () => {
+export const ProductPage = () => {
   const { slug } = useParams();
   const [product, setproduct] = useState({});
   const [similarProduct, setSimilarproduct] = useState([]);

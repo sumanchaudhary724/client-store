@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
   products: [],
 };
@@ -12,6 +13,7 @@ const productSlice = createSlice({
     },
   },
 });
+
 const { reducer, actions } = productSlice;
 export const { setProducts } = actions;
 export default reducer;
