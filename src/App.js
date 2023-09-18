@@ -13,6 +13,8 @@ import { useDispatch } from "react-redux";
 import { getCatagoriesAction } from "./pages/category/categoryAction";
 import { getProductsAction } from "./pages/product/productAction";
 import { ProductListing } from "./pages/product/productListing";
+import { AutoRedirect } from "./components/AutoRedirect/autoRedirect";
+import { Home } from "./pages/Home/Home";
 
 function App() {
   const location = useLocation();
@@ -25,6 +27,14 @@ function App() {
   return (
     <div className="">
       <Routes>
+        <Route
+          path="/"
+          element={
+            <AutoRedirect>
+              <Home />
+            </AutoRedirect>
+          }
+        />
         {/* public routers */}
         <Route
           path="dashboard"
@@ -34,8 +44,22 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path={"product/:slug/"} element={<ProductPage />} />
-        <Route path={"items/:slug/:_id"} element={<ProductListing />} />
+        <Route
+          path={"product/:slug/"}
+          element={
+            <AutoRedirect>
+              <ProductPage />
+            </AutoRedirect>
+          }
+        />
+        <Route
+          path={"items/:slug/:_id"}
+          element={
+            <AutoRedirect>
+              <ProductListing />
+            </AutoRedirect>
+          }
+        />
         <Route path="/" element={<SignIn />} />
         <Route path="user-verification" element={<UserVerification />} />
         <Route path="password-rest" element={<ResetPassword />} />

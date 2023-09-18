@@ -30,7 +30,7 @@ export default function CustomProductCard({ products }) {
     message: "",
   });
   const handleOnAddToFav = async (item) => {
-    const { status, message } = await dispatch(
+    const { status, message } = dispatch(
       addTofavAction({
         _id: user?._id,
         fav: item._id,
