@@ -11,7 +11,7 @@ export default configureStore({
   reducer: {
     system: systemReducer,
     userInfo: userReducer,
-    catagoryInfo: catReducer,
+    categoryInfo: catReducer,
     productInfo: productReducer,
     display: displayReducer,
     cart: presistedCartReducer,

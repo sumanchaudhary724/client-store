@@ -6,14 +6,14 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 export const CustomMenu = () => {
   const [value, setValue] = useState(0);
-  const { catagories } = useSelector((store) => store.catagoryInfo);
+  const { categories } = useSelector((store) => store.categoryInfo);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
     <>
-      {catagories?.length ? (
+      {categories?.length ? (
         <Box
           sx={{
             maxWidth: { xs: 470, sm: 680 },
@@ -29,7 +29,7 @@ export const CustomMenu = () => {
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
           >
-            {catagories?.map((cat) => (
+            {categories?.map((cat) => (
               <Link to={`items/${cat.slug}`} key={cat._id}>
                 <Tab key={cat._id + 1} label={cat.title} />
               </Link>

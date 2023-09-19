@@ -10,7 +10,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 export const SideBar = () => {
-  const { categories } = useSelector((store) => store.catagoryInfo);
+  const { categories } = useSelector((store) => store.categoryInfo);
 
   return (
     <Box
