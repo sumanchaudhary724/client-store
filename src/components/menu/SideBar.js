@@ -10,7 +10,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 export const SideBar = () => {
-  const { catagories } = useSelector((store) => store.catagoryInfo);
+  const { categories } = useSelector((store) => store.catagoryInfo);
 
   return (
     <Box
@@ -23,7 +23,7 @@ export const SideBar = () => {
       }}
     >
       <Typography variant="h5" color="text.primary">
-        Catagories
+        Categories
       </Typography>
       <Divider />
       <List
@@ -35,7 +35,7 @@ export const SideBar = () => {
           overflow: "auto",
         }}
       >
-        {catagories?.map((cat) => (
+        {categories?.map((cat) => (
           <>
             <Button variant="text" size="large" key={cat._id}>
               <Link to={`items/${cat.slug}/${cat._id}`} className="nav-link">
