@@ -45,7 +45,7 @@ function App() {
           }
         />
         <Route
-          path={"product/:slug/"}
+          path={"products/:slug/"}
           element={
             <AutoRedirect>
               <ProductPage />
