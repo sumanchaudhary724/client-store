@@ -17,6 +17,11 @@ const images = [
     label: "Bali, Indonesia",
     imgPath: image3,
   },
+  ,
+  {
+    label: "Bali",
+    imgPath: image2,
+  },
 ];
 
 export const CustomeCarousel = () => {
