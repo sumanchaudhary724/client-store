@@ -43,11 +43,7 @@ export const Header = () => {
                     Sign Out
                   </Link>
                 </>
-              ) : (
-                <Link to="/" className="nav-link">
-                  Sign In
-                </Link>
-              )}
+              ) }
             </Nav>
           </Navbar.Collapse>
         </Container>
