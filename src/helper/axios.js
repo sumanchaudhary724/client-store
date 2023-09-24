@@ -4,6 +4,7 @@ const rootAPI = process.env.REACT_APP_ROOTAPI;
 const userAPI = rootAPI + "/user";
 const catApi = rootAPI + "/category";
 const productApi = rootAPI + "/product";
+const orderAPI = rootAPI + "/order";
 
 const getAccessJWt = () => {
   return sessionStorage.getItem("accessJWT");
@@ -204,6 +205,34 @@ export const addToFav = async (object) => {
     url: `${userAPI}/addFav`,
     obj: object,
     isPrivate: true,
+  };
+  return axiosProcessor(obj);
+};
+
+//orders
+
+export const postOrder = async (object) => {
+  const obj = {
+    method: "post",
+    url: orderAPI,
+    obj: object,
+  };
+  return axiosProcessor(obj);
+};
+
+export const payWithCard = async (object) => {
+  const obj = {
+    method: "post",
+    url: orderAPI + "/checkout-with-stripe",
+    obj: object,
+  };
+  return axiosProcessor(obj);
+};
+export const getOrder = async (_id) => {
+  console.log(_id);
+  const obj = {
+    method: "get",
+    url: orderAPI + "/" + _id,
   };
   return axiosProcessor(obj);
 };

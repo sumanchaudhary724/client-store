@@ -28,7 +28,7 @@ function App() {
     <div className="">
       <Routes>
         <Route
-          path="/"
+          path="/home"
           element={
             <AutoRedirect>
               <Home />
@@ -36,14 +36,6 @@ function App() {
           }
         />
         {/* public routers */}
-        <Route
-          path="dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
         <Route
           path={"products/:slug/"}
           element={

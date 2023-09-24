@@ -1,57 +1,66 @@
-import React from "react";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { logoutUser } from "../../helper/axios";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../pages/signin-signup/userSlice";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
+import { useSelector } from "react-redux";
+import DrawerAppBar from "./DrawerAppBar";
 
 export const Header = () => {
+  const { user } = useSelector((store) => store.userInfo);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.userInfo);
-  const handleOnLogout = () => {
-    // log out from server by removing the access and refresh JWTs
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileAnchorEl, setMobileAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const [searchBar, setSearchBar] = useState(false);
 
-    logoutUser(user._id);
-
-    //clear storages
-    localStorage.removeItem("refreshJWT");
-    sessionStorage.removeItem("accessJWT");
-
-    // reset store
-    dispatch(setUser({}));
-    navigate("/");
+  const handleProfileMenuOpen = (event) => {
+    if (!user._id) {
+      navigate("/signin");
+      return;
+    }
+    setAnchorEl(event.currentTarget);
   };
+
   return (
-    <div>
-      <Navbar expand="md" variant="dark" className="bg-dark">
-        <Container>
-          <Link to="/" className="navbar-brand">
-            E-Store
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: { md: "row-reverse", xs: "row-reverse", lg: "column" },
+        alignItems: "center",
+      }}
+      className="header shadow"
+    >
+      <DrawerAppBar /> {/* Render the DrawerAppBar component here */}
+      <Box
+        sx={{
+          display: "flex",
+          p: 1,
+          justifyContent: "space-between",
+          width: { sm: "100%", md: "80%" },
+        }}
+      >
+        <Box
+          sx={{
+            flexGrow: 3,
+            textAlign: "left",
+            display: { xs: "none", sm: "none", md: "none", lg: "block" },
+          }}
+        >
+          <Link className="nav-link" to="/">
+            <Typography variant="h5" mt={1}>
+              Footwears
+            </Typography>
           </Link>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="ms-auto">
-              {user?._id ? (
-                <>
-                  <Link to="/dashboard" className="nav-link">
-                    Dashboard
-                  </Link>
-                  <Link to="#!" className="nav-link" onClick={handleOnLogout}>
-                    Sign Out
-                  </Link>
-                </>
-              ) : (
-                <Link to="/" className="nav-link">
-                  Sign In
-                </Link>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </div>
+        </Box>
+        <Box
+          sx={{
+            flexGrow: 2,
+            display: "flex",
+            justifyContent: "end",
+          }}
+        ></Box>
+      </Box>
+    </Box>
   );
 };
