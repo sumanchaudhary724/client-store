@@ -111,6 +111,7 @@ export const signInUser = (data) => {
     method: "post",
     url: userAPI + "/sign-in",
     obj: data,
+    isPrivate: true,
   };
   return axiosProcessor(obj);
 };
@@ -144,6 +145,7 @@ export const logoutUser = (_id) => {
       accessJWT: getAccessJWt(),
       refreshJWT: getRefreshJWT(),
     },
+    isPrivate: true,
   };
   return axiosProcessor(obj);
 };

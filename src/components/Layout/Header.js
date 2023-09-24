@@ -13,14 +13,6 @@ export const Header = () => {
   const open = Boolean(anchorEl);
   const [searchBar, setSearchBar] = useState(false);
 
-  const handleProfileMenuOpen = (event) => {
-    if (!user._id) {
-      navigate("/signin");
-      return;
-    }
-    setAnchorEl(event.currentTarget);
-  };
-
   return (
     <Box
       sx={{
@@ -31,7 +23,7 @@ export const Header = () => {
       }}
       className="header shadow"
     >
-      <DrawerAppBar /> {/* Render the DrawerAppBar component here */}
+      <DrawerAppBar />
       <Box
         sx={{
           display: "flex",

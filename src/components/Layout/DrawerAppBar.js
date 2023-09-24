@@ -12,6 +12,7 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"; // Import Redux hooks
@@ -21,9 +22,9 @@ import { setUser } from "../../pages/signin-signup/userSlice";
 const drawerWidth = 240;
 const navItems = ["Home", "About", "Contact"];
 
-function DrawerAppBar({ onSignIn, onSignOut, isAuthenticated }) {
+function DrawerAppBar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -33,8 +34,6 @@ function DrawerAppBar({ onSignIn, onSignOut, isAuthenticated }) {
   const { user } = useSelector((state) => state.userInfo);
 
   const handleOnLogout = () => {
-    // Logout logic here
-
     // Log out from the server by removing the access and refresh JWTs
     logoutUser(user._id);
 
@@ -44,8 +43,6 @@ function DrawerAppBar({ onSignIn, onSignOut, isAuthenticated }) {
 
     // Reset the store
     dispatch(setUser({}));
-
-    // Navigate to the home page or any other desired location after logout
     navigate("/");
   };
 
@@ -95,22 +92,28 @@ function DrawerAppBar({ onSignIn, onSignOut, isAuthenticated }) {
               </Button>
             ))}
           </Box>
-          {isAuthenticated ? (
+          {user?._id ? (
             <>
               <Button
-                color="primary"
-                variant="contained"
+                color="inherit"
                 onClick={handleOnLogout}
+                sx={{ display: { xs: "none", sm: "block" } }}
               >
                 Sign Out
               </Button>
             </>
           ) : (
-            <Button color="primary" variant="contained" onClick={onSignIn}>
+            <Button
+              color="inherit"
+              component={Link}
+              to="/"
+              sx={{ display: { xs: "none", sm: "block" } }}
+            >
               Sign In
             </Button>
           )}
         </Toolbar>
+        {/* Add any additional components or content here */}
       </AppBar>
       <nav>
         <Drawer

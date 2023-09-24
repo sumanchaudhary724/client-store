@@ -16,6 +16,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import { CartTable } from "../../components/cart/CartTable";
 import SendIcon from "@mui/icons-material/Send";
 import { OrderSummary } from "../../components/cart/OrderSummary";
+
 export const Cart = () => {
   const { cart } = useSelector((store) => store.cart);
   const dispatch = useDispatch();

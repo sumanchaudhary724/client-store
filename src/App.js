@@ -31,7 +31,10 @@ function App() {
           path="/home"
           element={
             <AutoRedirect>
-              <Home />
+              <PrivateRoute>
+                {" "}
+                <Home />
+              </PrivateRoute>
             </AutoRedirect>
           }
         />
@@ -40,15 +43,19 @@ function App() {
           path={"products/:slug/"}
           element={
             <AutoRedirect>
-              <ProductPage />
+              <PrivateRoute>
+                <ProductPage />
+              </PrivateRoute>
             </AutoRedirect>
           }
         />
         <Route
-          path={"items/:slug/:_id"}
+          path={"home/items/:slug/:_id"}
           element={
             <AutoRedirect>
-              <ProductListing />
+              <PrivateRoute>
+                <ProductListing />
+              </PrivateRoute>
             </AutoRedirect>
           }
         />

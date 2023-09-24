@@ -78,6 +78,12 @@ const SignIn = () => {
           <p className="mt-2 text-end">
             Forget password? <Link to="password-rest">reset </Link> now.
           </p>
+          <p className="mt-2 text-center">
+            Don't have an account?{" "}
+            <Link to="/new-user">
+              <Button variant="primary">Create Account</Button>
+            </Link>
+          </p>
         </Form>
       </main>
       <Footer />
