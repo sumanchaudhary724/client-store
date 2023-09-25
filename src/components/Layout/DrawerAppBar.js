@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"; // Import Redux hooks
 import { logoutUser } from "../../helper/axios";
 import { setUser } from "../../pages/signin-signup/userSlice";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const drawerWidth = 240;
 const navItems = ["Home", "About", "Contact"];
@@ -85,6 +86,14 @@ function DrawerAppBar() {
           >
             Footwears
           </Typography>
+          {/* Add the shopping cart icon here */}
+          <IconButton
+            color="inherit"
+            sx={{ display: { xs: "none", sm: "block" } }}
+            // Add an onClick handler for the shopping cart action
+          >
+            <ShoppingCartIcon />
+          </IconButton>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
               <Button key={item} sx={{ color: "#fff" }}>
@@ -113,6 +122,7 @@ function DrawerAppBar() {
             </Button>
           )}
         </Toolbar>
+
         {/* Add any additional components or content here */}
       </AppBar>
       <nav>

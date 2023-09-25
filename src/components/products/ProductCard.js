@@ -7,8 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Delete from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
 import { Alert, CardHeader, Snackbar } from "@mui/material";
@@ -116,9 +115,6 @@ export default function CustomProductCard({ products }) {
                 ? favIcons["redHeart"]
                 : favIcons["borderHeart"]}
             </IconButton>
-            <IconButton aria-label="share">
-              <ShareIcon />
-            </IconButton>
             {cart.some((cartObj) => cartObj._id === item._id) ? (
               <motion.div
                 initial={{ x: 20 }}
@@ -144,7 +140,7 @@ export default function CustomProductCard({ products }) {
                     dispatch(setCart({ ...item, orderQty: 1 }));
                   }}
                 >
-                  <AddShoppingCartIcon />
+                  <ShoppingCartIcon />
                 </IconButton>
               </motion.div>
             )}
