@@ -15,6 +15,8 @@ import { getProductsAction } from "./pages/product/productAction";
 import { ProductListing } from "./pages/product/productListing";
 import { AutoRedirect } from "./components/AutoRedirect/autoRedirect";
 import { Home } from "./pages/Home/Home";
+import { Cart } from "./pages/cart/Cart";
+import { Checkout } from "./pages/checkout/Checkout";
 
 function App() {
   const location = useLocation();
@@ -59,6 +61,23 @@ function App() {
             </AutoRedirect>
           }
         />
+        <Route
+          path="/checkout"
+          element={
+            <PrivateRoute>
+              <Checkout />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <AutoRedirect>
+              <Cart />
+            </AutoRedirect>
+          }
+        />
+
         <Route path="/" element={<SignIn />} />
         <Route path="user-verification" element={<UserVerification />} />
         <Route path="password-rest" element={<ResetPassword />} />

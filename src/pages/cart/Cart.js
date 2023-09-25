@@ -2,19 +2,9 @@ import React from "react";
 import { Header } from "../../components/layout/Header";
 import { Footer } from "../../components/layout/Footer";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Box,
-  Button,
-  Container,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { removeItemFromCart } from "../cart/cartSlice";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import { CartTable } from "../../components/cart/CartTable";
-import SendIcon from "@mui/icons-material/Send";
 import { OrderSummary } from "../../components/cart/OrderSummary";
 
 export const Cart = () => {

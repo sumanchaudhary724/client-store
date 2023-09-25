@@ -15,20 +15,35 @@ import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux"; // Import Redux hooks
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../helper/axios";
 import { setUser } from "../../pages/signin-signup/userSlice";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { CartDrawer } from "../cart/CartDrawer";
 
 const drawerWidth = 240;
 const navItems = ["Home", "About", "Contact"];
 
 function DrawerAppBar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [cartDrawerOpen, setCartDrawerOpen] = useState(false); // State for the cart drawer
+  const { cart } = useSelector((store) => store.cart);
   const navigate = useNavigate();
+
+  const calculateTotalItems = () => {
+    let totalItems = 0;
+    cart.forEach((item) => {
+      totalItems += item.orderQty;
+    });
+    return totalItems;
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+  };
+
+  const handleCartDrawerToggle = () => {
+    setCartDrawerOpen((prevState) => !prevState); // Toggle cart drawer state
   };
 
   const dispatch = useDispatch();
@@ -90,7 +105,7 @@ function DrawerAppBar() {
           <IconButton
             color="inherit"
             sx={{ display: { xs: "none", sm: "block" } }}
-            // Add an onClick handler for the shopping cart action
+            onClick={handleCartDrawerToggle} // Open the cart drawer when clicked
           >
             <ShoppingCartIcon />
           </IconButton>
@@ -122,8 +137,6 @@ function DrawerAppBar() {
             </Button>
           )}
         </Toolbar>
-
-        {/* Add any additional components or content here */}
       </AppBar>
       <nav>
         <Drawer
@@ -144,6 +157,11 @@ function DrawerAppBar() {
           {drawer}
         </Drawer>
       </nav>
+      <CartDrawer
+        isOpen={cartDrawerOpen}
+        toggleDrawer={handleCartDrawerToggle}
+        totalItems={calculateTotalItems()}
+      />
     </Box>
   );
 }
