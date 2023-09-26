@@ -17,6 +17,8 @@ import { AutoRedirect } from "./components/AutoRedirect/autoRedirect";
 import { Home } from "./pages/Home/Home";
 import { Cart } from "./pages/cart/Cart";
 import { Checkout } from "./pages/checkout/Checkout";
+import { getPaymentMethodAction } from "./pages/payment/paymentMethodAction";
+import { OrderConfirmationPage } from "./pages/orderConfirmation/OrderConfirmationPage";
 
 function App() {
   const location = useLocation();
@@ -24,43 +26,38 @@ function App() {
   useEffect(() => {
     dispatch(getCatagoriesAction());
     dispatch(getProductsAction());
+    dispatch(getPaymentMethodAction());
   }, []);
 
   return (
     <div className="">
       <Routes>
         <Route
-          path="/home"
+          path="/"
           element={
             <AutoRedirect>
-              <PrivateRoute>
-                {" "}
-                <Home />
-              </PrivateRoute>
+              <Home />
             </AutoRedirect>
           }
         />
         {/* public routers */}
         <Route
-          path={"products/:slug/"}
+          path={"product/:slug/"}
           element={
             <AutoRedirect>
-              <PrivateRoute>
-                <ProductPage />
-              </PrivateRoute>
+              <ProductPage />
             </AutoRedirect>
           }
         />
         <Route
-          path={"home/items/:slug/:_id"}
+          path={"items/:slug/:_id"}
           element={
             <AutoRedirect>
-              <PrivateRoute>
-                <ProductListing />
-              </PrivateRoute>
+              <ProductListing />
             </AutoRedirect>
           }
         />
+
         <Route
           path="/checkout"
           element={
@@ -75,6 +72,14 @@ function App() {
             <AutoRedirect>
               <Cart />
             </AutoRedirect>
+          }
+        />
+        <Route
+          path={"/cart/order/:_id"}
+          element={
+            <PrivateRoute>
+              <OrderConfirmationPage />
+            </PrivateRoute>
           }
         />
 

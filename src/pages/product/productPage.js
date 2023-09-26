@@ -95,8 +95,11 @@ export const ProductPage = () => {
               >
                 <Stack direction="column" gap={1}>
                   <Typography variant="h4">
-                    {product.title.toUpperCase()}
+                    {product && product.name
+                      ? product.name.toUpperCase()
+                      : "Product Title Not Available"}
                   </Typography>
+
                   <span style={{ display: "flex", gap: 5 }}>
                     <Rating name="read-only" value={4} readOnly />
                     <Typography variant="subtitle1" color={"grey"}>

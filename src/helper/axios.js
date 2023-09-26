@@ -5,6 +5,7 @@ const userAPI = rootAPI + "/user";
 const catApi = rootAPI + "/category";
 const productApi = rootAPI + "/product";
 const orderAPI = rootAPI + "/order";
+const paymentAPI = rootAPI + "/payment";
 
 const getAccessJWt = () => {
   return sessionStorage.getItem("accessJWT");
@@ -230,11 +231,20 @@ export const payWithCard = async (object) => {
   };
   return axiosProcessor(obj);
 };
+
 export const getOrder = async (_id) => {
   console.log(_id);
   const obj = {
     method: "get",
     url: orderAPI + "/" + _id,
+  };
+  return axiosProcessor(obj);
+};
+
+export const getAllPaymentMethods = async () => {
+  const obj = {
+    method: "get",
+    url: paymentAPI,
   };
   return axiosProcessor(obj);
 };
