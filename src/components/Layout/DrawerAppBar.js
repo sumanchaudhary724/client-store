@@ -130,7 +130,7 @@ function DrawerAppBar() {
             <Button
               color="inherit"
               component={Link}
-              to="/"
+              to="/sign-in"
               sx={{ display: { xs: "none", sm: "block" } }}
             >
               Sign In

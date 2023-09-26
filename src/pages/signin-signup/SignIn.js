@@ -19,7 +19,7 @@ const SignIn = () => {
   const [form, setForm] = useState(initialState);
   const { user } = useSelector((state) => state.userInfo);
 
-  const pathTo = location.state?.from?.location?.pathname || "/home";
+  const pathTo = location.state?.from?.location?.pathname || "/";
   useEffect(() => {
     user?._id && navigate(pathTo);
     dispatch(autoLogin());

@@ -54,7 +54,7 @@ export const Checkout = () => {
     }
     const pending = dispatch(postOrderAction(orderData));
     setopen(true);
-    const orderNumber = await pending;
+    const orderNumber = pending;
     console.log(orderNumber);
     navigate(`/cart/order/${orderNumber}`);
 

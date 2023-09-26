@@ -7,7 +7,6 @@ import UserVerification from "./pages/signin-signup/UserVerification";
 import { PrivateRoute } from "./components/private/PrivateRoute";
 import ResetPassword from "./pages/signin-signup/ResetPassword";
 import "./App.css";
-import { Dashboard } from "./pages/dashboard/Dashboard";
 import { ProductPage } from "./pages/product/productPage";
 import { useDispatch } from "react-redux";
 import { getCatagoriesAction } from "./pages/category/categoryAction";
@@ -75,7 +74,7 @@ function App() {
           }
         />
         <Route
-          path={"/cart/order/:_id"}
+          path={"/cart/orderItems/:_id"}
           element={
             <PrivateRoute>
               <OrderConfirmationPage />
@@ -83,7 +82,7 @@ function App() {
           }
         />
 
-        <Route path="/" element={<SignIn />} />
+        <Route path="/sign-in" element={<SignIn />} />
         <Route path="user-verification" element={<UserVerification />} />
         <Route path="password-rest" element={<ResetPassword />} />
         <Route path="new-user" element={<SignUp />} />

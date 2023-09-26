@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { UserLayout } from "../../components/layout/UserLayout";
 import { useParams } from "react-router-dom";
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { getOrder } from "../../helper/axios";
 
 export const OrderConfirmationPage = () => {
@@ -10,6 +19,7 @@ export const OrderConfirmationPage = () => {
   useEffect(() => {
     async function getData() {
       const { result } = await getOrder(_id);
+      console.log(result);
       setOrder(result);
     }
     getData();
@@ -27,19 +37,19 @@ export const OrderConfirmationPage = () => {
           <Paper elevation={0}>
             <div className="d-flex gap-5">
               <Typography>Name</Typography>
-              <Typography>{order.user.fName + order.user.lName}</Typography>
+              <Typography>{order.user?.fName + order.user?.lName}</Typography>
             </div>
             <div className="d-flex gap-5">
               <Typography>Address</Typography>
-              <Typography>{order.user.address}</Typography>
+              <Typography>{order.user?.address}</Typography>
             </div>
             <div className="d-flex gap-5">
               <Typography>Phone</Typography>
-              <Typography>{order.user.phone}</Typography>
+              <Typography>{order.user?.phone}</Typography>
             </div>
             <div className="d-flex gap-5">
               <Typography>Email</Typography>
-              <Typography>{order.user.email}</Typography>
+              <Typography>{order.user?.email}</Typography>
             </div>
           </Paper>
 
