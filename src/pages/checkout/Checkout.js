@@ -18,6 +18,7 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import { postOrderAction } from "../../pages/order/orderAction";
 import { useNavigate } from "react-router-dom";
 import { payWithCard } from "../../helper/axios";
+
 export const Checkout = () => {
   const { cart } = useSelector((store) => store.cart);
   const navigate = useNavigate();
@@ -42,24 +43,29 @@ export const Checkout = () => {
     setPayment({ ...payment, totalAmount, isPaid: false });
     setOrderData({ orderItems: cart, user: userForm, payment });
   }, [userForm, cart, payment]);
+
   const dispatch = useDispatch();
   const [open, setopen] = useState(false);
+
   const handleOnSubmitOrder = async () => {
     if (payment.method === "Pay with credit card") {
       payWithCard(orderData).then(({ url, session }) => {
         window.open(url);
-        dispatch(postOrderAction(orderData));
       });
-      return;
     }
-    const pending = dispatch(postOrderAction(orderData));
-    setopen(true);
-    const orderNumber = pending;
-    console.log(orderNumber);
-    navigate(`/cart/order/${orderNumber}`);
 
-    setopen(false);
+    try {
+      setopen(true); // Show loading backdrop
+      const orderNumber = await dispatch(postOrderAction(orderData));
+      navigate(`/cart/order/${orderNumber}`);
+    } catch (error) {
+      // Handle any errors that may occur during the order submission.
+      console.error("Error placing order:", error);
+    } finally {
+      setopen(false); // Hide loading backdrop (whether successful or not)
+    }
   };
+
   return (
     <UserLayout>
       <Backdrop open={open} />
