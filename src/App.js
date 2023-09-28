@@ -74,7 +74,7 @@ function App() {
           }
         />
         <Route
-          path={"/cart/orderItems/:_id"}
+          path={"/cart/order/:_id"}
           element={
             <PrivateRoute>
               <OrderConfirmationPage />
