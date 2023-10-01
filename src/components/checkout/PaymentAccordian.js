@@ -14,21 +14,33 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useSelector } from "react-redux";
-import { payWithCard } from "../../helper/axios";
-export const PaymentAccordian = ({ activeStep, payment, setPayment }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { setOrder } from "../../pages/order/orderSlice";
+
+const initialState = {
+  method: "",
+
+  isPaid: false,
+};
+export const PaymentAccordian = ({ activeStep, totalAmount }) => {
   const { paymentMethods } = useSelector((store) => store.paymentInfo);
   const [open, setOpen] = useState(false);
+  const [payment, setPayment] = useState(initialState);
+  const dispatch = useDispatch();
   const handleChange = async (e) => {
     const { value } = e.target;
-    console.log(value);
-    setPayment({ method: value });
+    setPayment({ ...payment, method: value, totalAmount });
   };
   useEffect(() => {
     if (activeStep === 2) {
       setOpen(!open);
     }
   }, [activeStep]);
+
+  const handleOnContinue = () => {
+    dispatch(setOrder({ payment, name: "paymentMethod" }));
+    setOpen(false);
+  };
   return (
     <Accordion expanded={open} disabled={activeStep < 2}>
       <AccordionSummary
@@ -65,9 +77,7 @@ export const PaymentAccordian = ({ activeStep, payment, setPayment }) => {
           fullWidth
           variant="contained"
           sx={{ mt: 2 }}
-          onClick={() => {
-            setOpen(false);
-          }}
+          onClick={handleOnContinue}
           disabled={payment.method === ""}
         >
           Continue

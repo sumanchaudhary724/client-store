@@ -6,6 +6,7 @@ const catApi = rootAPI + "/category";
 const productApi = rootAPI + "/product";
 const orderAPI = rootAPI + "/order";
 const paymentAPI = rootAPI + "/payment";
+const stripeAPI = rootAPI + "/stripe";
 
 const getAccessJWt = () => {
   return sessionStorage.getItem("accessJWT");
@@ -223,15 +224,6 @@ export const postOrder = async (object) => {
   return axiosProcessor(obj);
 };
 
-export const payWithCard = async (object) => {
-  const obj = {
-    method: "post",
-    url: orderAPI + "/checkout-with-stripe",
-    obj: object,
-  };
-  return axiosProcessor(obj);
-};
-
 export const getOrder = async (_id) => {
   console.log(_id);
   const obj = {
@@ -245,6 +237,25 @@ export const getAllPaymentMethods = async () => {
   const obj = {
     method: "get",
     url: paymentAPI,
+  };
+  return axiosProcessor(obj);
+};
+
+//Stripe Axios
+export const postPaymentIntent = async (object) => {
+  const obj = {
+    method: "post",
+    url: stripeAPI + "/payment-intent",
+    obj: object,
+  };
+  return axiosProcessor(obj);
+};
+
+export const payWithCard = async (object) => {
+  const obj = {
+    method: "post",
+    url: stripeAPI + "/checkout-with-stripe",
+    obj: object,
   };
   return axiosProcessor(obj);
 };

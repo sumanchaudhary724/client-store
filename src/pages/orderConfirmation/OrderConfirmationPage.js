@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { UserLayout } from "../../components/layout/UserLayout";
 import { useParams } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Container,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { getOrder } from "../../helper/axios";
 
 export const OrderConfirmationPage = () => {

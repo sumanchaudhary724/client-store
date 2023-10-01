@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/system";
 import {
   Backdrop,
+  Box,
   Button,
   CircularProgress,
   Divider,
@@ -17,54 +17,64 @@ import { PaymentAccordian } from "../../components/checkout/PaymentAccordian";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import { postOrderAction } from "../../pages/order/orderAction";
 import { useNavigate } from "react-router-dom";
-import { payWithCard } from "../../helper/axios";
+import { StripeCheckout } from "../../pages/checkout/StipeCheckout";
+import { setModal } from "../../components/modal/modalSlice";
+import { postPaymentIntent } from "../../helper/axios";
 
 export const Checkout = () => {
-  const { cart } = useSelector((store) => store.cart);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const { cart } = useSelector((store) => store.cart);
+  const { payment, user, orderItems } = useSelector((store) => store.orderInfo);
+  const stripeStatus = new URLSearchParams(window.location.search).get(
+    "redirect_status"
+  );
+  const [open, setopen] = useState(false);
   const [shippingCost, setShippingCost] = useState(9.99);
   const [discount, setDiscount] = useState(19.99);
+  const [activeStep, setactiveStep] = useState(0);
+  const [clientSecret, setClientSecret] = useState("");
+
   const totalAmount = cart.reduce((acc, curr) => {
     return acc + curr.orderQty * curr.price + shippingCost - discount;
   }, 0);
 
-  const [activeStep, setactiveStep] = useState(0);
-  const { user } = useSelector((store) => store.userInfo);
-  const [payment, setPayment] = useState({ method: "" });
-  const [userForm, setUserForm] = useState({});
-  const [orderData, setOrderData] = useState({});
+  async function getClientSecret() {
+    const result = await postPaymentIntent({
+      customer: user._id,
+      payment: payment.method,
+      totalAmount,
+    });
+    setClientSecret(result.clientSecret);
+    if (result.clientSecret) {
+      dispatch(setModal({ isModalOpen: true, modalName: payment.method }));
+    }
+  }
 
-  useEffect(() => {
-    setUserForm({ ...user });
-  }, [user]);
-
-  useEffect(() => {
-    setPayment({ ...payment, totalAmount, isPaid: false });
-    setOrderData({ orderItems: cart, user: userForm, payment });
-  }, [userForm, cart, payment]);
-
-  const dispatch = useDispatch();
-  const [open, setopen] = useState(false);
+  async function postOrder() {
+    const pending = dispatch(postOrderAction({ payment, user, orderItems }));
+    setopen(true);
+    const orderNumber = pending;
+    if (orderNumber) {
+      navigate(`/cart/order/${orderNumber}`);
+    }
+    setopen(false);
+  }
 
   const handleOnSubmitOrder = async () => {
-    if (payment.method === "Pay with credit card") {
-      payWithCard(orderData).then(({ url, session }) => {
-        window.open(url);
-      });
+    if (payment.method === "Cash on Delivery") {
+      console.log("inside cash on delivery");
+      postOrder();
     }
-
-    try {
-      setopen(true); // Show loading backdrop
-      const orderNumber = await dispatch(postOrderAction(orderData));
-      navigate(`/cart/order/${orderNumber}`);
-    } catch (error) {
-      // Handle any errors that may occur during the order submission.
-      console.error("Error placing order:", error);
-    } finally {
-      setopen(false); // Hide loading backdrop (whether successful or not)
-    }
+    getClientSecret();
   };
+
+  // Call Stripe API to request the client secret
+  useEffect(() => {
+    if (stripeStatus) {
+      postOrder();
+    }
+  }, [stripeStatus]);
 
   return (
     <UserLayout>
@@ -97,19 +107,15 @@ export const Checkout = () => {
           }}
         >
           <CustomStepper activeStep={activeStep} />
-          <OrderDetailsAccordian setactiveStep={setactiveStep} />
+          <OrderDetailsAccordian setactiveStep={setactiveStep} cart={cart} />
           <UserDetailsAccordian
             activeStep={activeStep}
             setactiveStep={setactiveStep}
-            userForm={userForm}
-            setUserForm={setUserForm}
           />
           <PaymentAccordian
             activeStep={activeStep}
             setactiveStep={setactiveStep}
-            payment={payment}
-            setPayment={setPayment}
-            cart={cart}
+            totalAmount={totalAmount}
           />
         </Box>
         <Box
@@ -136,11 +142,7 @@ export const Checkout = () => {
             >
               <div style={{ height: "auto", width: "80px" }}>
                 <img
-                  src={
-                    process.env.REACT_APP_ROOTSERVER +
-                    "/" +
-                    item.thumbnail?.slice(6)
-                  }
+                  src={item.thumbnail}
                   alt=""
                   style={{
                     width: "100%",
@@ -157,7 +159,7 @@ export const Checkout = () => {
                 }}
               >
                 <Typography variant="h6">{item.title}</Typography>
-                <Typography variant="subtitle" color="grey">
+                <Typography variant="subtitle1" color="grey">
                   ${item.price}
                 </Typography>
                 <Typography variant="h6"> Qty:{item.orderQty}</Typography>
@@ -165,7 +167,7 @@ export const Checkout = () => {
             </Paper>
           ))}
           <Divider sx={{ mt: 2 }} />
-          <Typography variant="h5">Total:{`$` + totalAmount}</Typography>
+          <Typography variant="h5">Total: {"$" + totalAmount}</Typography>
           <Button
             fullWidth
             variant="contained"
@@ -174,15 +176,16 @@ export const Checkout = () => {
             color="success"
             onClick={handleOnSubmitOrder}
             disabled={
-              cart.length === 0 ||
+              orderItems.length === 0 ||
               user?._id === undefined ||
-              payment.method === ""
+              payment.method === undefined
             }
           >
             Place order
           </Button>
         </Box>
       </Box>
+      {clientSecret && <StripeCheckout clientSecret={clientSecret} />}
     </UserLayout>
   );
 };

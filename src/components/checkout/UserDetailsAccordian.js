@@ -10,13 +10,17 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useSelector } from "react-redux";
-export const UserDetailsAccordian = ({
-  activeStep,
-  setactiveStep,
-  setUserForm,
-  userForm,
-}) => {
+import { useDispatch, useSelector } from "react-redux";
+import { setOrder } from "../../pages/order/orderSlice";
+export const UserDetailsAccordian = ({ activeStep, setactiveStep }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((store) => store.userInfo);
+  const [userForm, setUserForm] = useState({});
+
+  useEffect(() => {
+    setUserForm(user);
+  }, [user]);
+
   const handleOnUserChange = (e) => {
     const { name, value } = e.target;
     setUserForm({ ...userForm, [name]: value });
@@ -27,6 +31,7 @@ export const UserDetailsAccordian = ({
   const handleOnSubmit = () => {
     setactiveStep(2);
     setOpen(!open);
+    dispatch(setOrder({ userForm, name: "user" }));
   };
   useEffect(() => {
     if (activeStep === 1) {
