@@ -20,7 +20,7 @@ export const StripeCheckout = ({ setStripeStatus, clientSecret }) => {
       {clientSecret && (
         <CustomModal>
           <Elements stripe={stripePromise} options={options}>
-            <CheckoutForm />
+            <CheckoutForm clientSecret={clientSecret} />
           </Elements>
         </CustomModal>
       )}

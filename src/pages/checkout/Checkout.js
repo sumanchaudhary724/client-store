@@ -20,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 import { StripeCheckout } from "../../pages/checkout/StipeCheckout";
 import { setModal } from "../../components/modal/modalSlice";
 import { postPaymentIntent } from "../../helper/axios";
-
 export const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,6 +28,9 @@ export const Checkout = () => {
   const stripeStatus = new URLSearchParams(window.location.search).get(
     "redirect_status"
   );
+  const payment_intent_client_secret = new URLSearchParams(
+    window.location.search
+  ).get("payment_intent_client_secret");
   const [open, setopen] = useState(false);
   const [shippingCost, setShippingCost] = useState(9.99);
   const [discount, setDiscount] = useState(19.99);
@@ -38,7 +40,6 @@ export const Checkout = () => {
   const totalAmount = cart.reduce((acc, curr) => {
     return acc + curr.orderQty * curr.price + shippingCost - discount;
   }, 0);
-
   async function getClientSecret() {
     const result = await postPaymentIntent({
       customer: user._id,
@@ -54,27 +55,24 @@ export const Checkout = () => {
   async function postOrder() {
     const pending = dispatch(postOrderAction({ payment, user, orderItems }));
     setopen(true);
-    const orderNumber = pending;
+    const orderNumber = await pending;
     if (orderNumber) {
       navigate(`/cart/order/${orderNumber}`);
     }
     setopen(false);
   }
-
   const handleOnSubmitOrder = async () => {
     if (payment.method === "Cash on Delivery") {
-      console.log("inside cash on delivery");
       postOrder();
     }
     getClientSecret();
   };
-
-  // Call Stripe API to request the client secret
+  // call stripe api to request client secret
   useEffect(() => {
     if (stripeStatus) {
       postOrder();
     }
-  }, [stripeStatus]);
+  }, [payment_intent_client_secret]);
 
   return (
     <UserLayout>
@@ -159,7 +157,7 @@ export const Checkout = () => {
                 }}
               >
                 <Typography variant="h6">{item.title}</Typography>
-                <Typography variant="subtitle1" color="grey">
+                <Typography variant="subtitle" color="grey">
                   ${item.price}
                 </Typography>
                 <Typography variant="h6"> Qty:{item.orderQty}</Typography>
@@ -167,7 +165,7 @@ export const Checkout = () => {
             </Paper>
           ))}
           <Divider sx={{ mt: 2 }} />
-          <Typography variant="h5">Total: {"$" + totalAmount}</Typography>
+          <Typography variant="h5">Total:{`$` + totalAmount}</Typography>
           <Button
             fullWidth
             variant="contained"
