@@ -17,7 +17,7 @@ import { PaymentAccordian } from "../../components/checkout/PaymentAccordian";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import { postOrderAction } from "../../pages/order/orderAction";
 import { useNavigate } from "react-router-dom";
-import { StripeCheckout } from "../../pages/checkout/StipeCheckout";
+import { StripeCheckout } from "../../pages/checkout/StripeCheckout";
 import { setModal } from "../../components/modal/modalSlice";
 import { postPaymentIntent } from "../../helper/axios";
 export const Checkout = () => {
@@ -52,7 +52,7 @@ export const Checkout = () => {
     }
   }
 
-  async function postOrder() {
+  const postOrder = async () => {
     const pending = dispatch(postOrderAction({ payment, user, orderItems }));
     setopen(true);
     const orderNumber = await pending;
@@ -60,13 +60,20 @@ export const Checkout = () => {
       navigate(`/cart/order/${orderNumber}`);
     }
     setopen(false);
-  }
-  const handleOnSubmitOrder = async () => {
-    if (payment.method === "Cash on Delivery") {
-      postOrder();
-    }
-    getClientSecret();
   };
+
+  const handleOnSubmitOrder = async () => {
+    try {
+      if (payment.method === "Cash on Delivery") {
+        postOrder();
+      }
+      getClientSecret();
+    } catch (error) {
+      console.error("Error:", error);
+      // Handle the error gracefully (e.g., display an error message to the user)
+    }
+  };
+
   // call stripe api to request client secret
   useEffect(() => {
     if (stripeStatus) {

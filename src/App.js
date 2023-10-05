@@ -18,6 +18,11 @@ import { Cart } from "./pages/cart/Cart";
 import { Checkout } from "./pages/checkout/Checkout";
 import { getPaymentMethodAction } from "./pages/payment/paymentMethodAction";
 import { OrderConfirmationPage } from "./pages/orderConfirmation/OrderConfirmationPage";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+const stripePromise = loadStripe(
+  `${process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}`
+);
 
 function App() {
   const location = useLocation();
@@ -61,7 +66,9 @@ function App() {
           path="/checkout"
           element={
             <PrivateRoute>
-              <Checkout />
+              <Elements stripe={stripePromise}>
+                <Checkout />
+              </Elements>
             </PrivateRoute>
           }
         />
