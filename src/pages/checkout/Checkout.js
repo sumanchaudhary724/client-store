@@ -17,20 +17,22 @@ import { PaymentAccordian } from "../../components/checkout/PaymentAccordian";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import { postOrderAction } from "../../pages/order/orderAction";
 import { useNavigate } from "react-router-dom";
-import { StripeCheckout } from "../../pages/checkout/StripeCheckout";
+import { StripeCheckout } from "./StripeCheckout";
 import { setModal } from "../../components/modal/modalSlice";
 import { postPaymentIntent } from "../../helper/axios";
+import { Stripe } from "@stripe/stripe-js";
+import { useStripe } from "@stripe/react-stripe-js";
+
 export const Checkout = () => {
+  const stripe = useStripe();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cart } = useSelector((store) => store.cart);
   const { payment, user, orderItems } = useSelector((store) => store.orderInfo);
-  const stripeStatus = new URLSearchParams(window.location.search).get(
-    "redirect_status"
+
+  const client_secret = new URLSearchParams(window.location.search).get(
+    "payment_intent_client_secret"
   );
-  const payment_intent_client_secret = new URLSearchParams(
-    window.location.search
-  ).get("payment_intent_client_secret");
   const [open, setopen] = useState(false);
   const [shippingCost, setShippingCost] = useState(9.99);
   const [discount, setDiscount] = useState(19.99);
@@ -52,7 +54,7 @@ export const Checkout = () => {
     }
   }
 
-  const postOrder = async () => {
+  async function postOrder() {
     const pending = dispatch(postOrderAction({ payment, user, orderItems }));
     setopen(true);
     const orderNumber = await pending;
@@ -60,26 +62,19 @@ export const Checkout = () => {
       navigate(`/cart/order/${orderNumber}`);
     }
     setopen(false);
-  };
-
+  }
   const handleOnSubmitOrder = async () => {
-    try {
-      if (payment.method === "Cash on Delivery") {
-        postOrder();
-      }
-      getClientSecret();
-    } catch (error) {
-      console.error("Error:", error);
-      // Handle the error gracefully (e.g., display an error message to the user)
-    }
-  };
-
-  // call stripe api to request client secret
-  useEffect(() => {
-    if (stripeStatus) {
+    if (payment.method === "Cash on Delivery") {
       postOrder();
     }
-  }, [payment_intent_client_secret]);
+    getClientSecret();
+  };
+  // async function retrivePaymentIntent() {
+  //   return await stripe.retrievePaymentIntent(client_secret);
+  // }
+  useEffect(() => {
+    // retrivePaymentIntent();
+  }, [client_secret]);
 
   return (
     <UserLayout>

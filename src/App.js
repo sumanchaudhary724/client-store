@@ -20,6 +20,7 @@ import { getPaymentMethodAction } from "./pages/payment/paymentMethodAction";
 import { OrderConfirmationPage } from "./pages/orderConfirmation/OrderConfirmationPage";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+
 const stripePromise = loadStripe(
   `${process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}`
 );
@@ -63,7 +64,7 @@ function App() {
         />
 
         <Route
-          path="/checkout"
+          path="/cart/checkout"
           element={
             <PrivateRoute>
               <Elements stripe={stripePromise}>
@@ -72,6 +73,7 @@ function App() {
             </PrivateRoute>
           }
         />
+
         <Route
           path="/cart"
           element={

@@ -7,23 +7,23 @@ import {
 } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { setModal } from "../../components/modal/modalSlice";
+import { postUserAction } from "../signin-signup/userAction";
 import { postOrderAction } from "../../pages/order/orderAction";
-
-export const CheckoutForm = ({ clientSecret }) => {
+const CheckoutForm = ({ clientSecret }) => {
   const { user, payment, orderItems } = useSelector((store) => store.orderInfo);
   const dispatch = useDispatch();
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState("");
-
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) {
       return;
     }
     if (payment.method === "afterpay_clearpay") {
-      stripe
-        .confirmAfterpayClearpayPayment(`${clientSecret}`, {
+      const { error, paymentIntent } =
+        await stripe.confirmAfterpayClearpayPayment(`${clientSecret}`, {
           payment_method: {
             billing_details: {
               name: user.fName,
@@ -43,14 +43,6 @@ export const CheckoutForm = ({ clientSecret }) => {
           },
 
           return_url: "http://localhost:3000/checkout",
-        })
-        .then((response) => {
-          if (response.paymentIntent) {
-            dispatch(postOrderAction({ payment, user, orderItems }));
-          }
-          if (response.error) {
-            setError(error);
-          }
         });
     }
     if (payment.method === "zip") {
@@ -59,22 +51,13 @@ export const CheckoutForm = ({ clientSecret }) => {
       });
     }
     if (payment.method === "card") {
-      stripe
-        .confirmPayment(clientSecret, {
-          elements,
-          confirmParams: {
-            // Make sure to change this to your payment completion page
-            return_url: "http://localhost:3000/checkout",
-          },
-        })
-        .then((response) => {
-          if (response.error) {
-            setError(error);
-          }
-          if (response?.paymentIntent.status === "succeeded") {
-            dispatch(postOrderAction({ payment, user, orderItems }));
-          }
-        });
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          // Make sure to change this to your payment completion page
+          return_url: "http://localhost:3000/checkout",
+        },
+      });
     }
   };
   return (
@@ -89,7 +72,7 @@ export const CheckoutForm = ({ clientSecret }) => {
       >
         <h1>Billing Details</h1>
         <AddressElement options={{ mode: "billing" }} />
-        <PaymentElement options={{ layout: "elements" }} />
+        <PaymentElement options={{ layout: "tabs" }} />
         <Button
           variant="contained"
           color="success"
@@ -106,3 +89,5 @@ export const CheckoutForm = ({ clientSecret }) => {
     </Box>
   );
 };
+
+export default CheckoutForm;

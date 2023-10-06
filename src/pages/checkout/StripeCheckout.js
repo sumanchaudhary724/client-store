@@ -1,8 +1,7 @@
 import React from "react";
 import { Elements, PaymentElement } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { CheckoutForm } from "./CheckoutForm";
-import { UserLayout } from "../../components/layout/UserLayout";
+import CheckoutForm from "./CheckoutForm";
 import { CustomModal } from "../../components/modal/CustomModal";
 
 const stripePromise = loadStripe(
@@ -15,6 +14,7 @@ export const StripeCheckout = ({ clientSecret }) => {
       theme: "stripe",
     },
   };
+  console.log(StripeCheckout);
   return (
     <>
       {clientSecret && (

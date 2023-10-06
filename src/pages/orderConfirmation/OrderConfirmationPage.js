@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { UserLayout } from "../../components/layout/UserLayout";
 import { useParams } from "react-router-dom";
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { getOrder } from "../../helper/axios";
+import { wrap } from "framer-motion";
 
 export const OrderConfirmationPage = () => {
   const { _id } = useParams();
@@ -17,7 +27,15 @@ export const OrderConfirmationPage = () => {
   }, [_id]);
   return (
     <UserLayout>
-      <Container sx={{ display: "flex", gap: 1 }}>
+      <Container
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column-reverse", sm: "row" },
+          justifyContent: "center",
+          gap: 1,
+          flexWrap: wrap,
+        }}
+      >
         <Box sx={{ display: "grid", gap: 2 }} width={"60%"}>
           <Typography variant="h5">Thank you for your purchase!</Typography>
           <Typography variant="body2">

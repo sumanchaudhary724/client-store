@@ -75,7 +75,7 @@ export const OrderSummary = () => {
         </Typography>
       </span>
       {user?._id ? (
-        <Link to="/checkout">
+        <Link to="/cart/checkout">
           <Button
             fullWidth
             variant="contained"
@@ -92,7 +92,7 @@ export const OrderSummary = () => {
           color="primary"
           endIcon={<LoginIcon />}
           onClick={() => {
-            navigate("/signin");
+            navigate("/sign-in");
           }}
         >
           Log in
