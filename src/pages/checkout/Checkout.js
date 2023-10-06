@@ -48,6 +48,7 @@ export const Checkout = () => {
       payment: payment.method,
       totalAmount,
     });
+    console.log(result);
     setClientSecret(result.clientSecret);
     if (result.clientSecret) {
       dispatch(setModal({ isModalOpen: true, modalName: payment.method }));
@@ -64,14 +65,13 @@ export const Checkout = () => {
     setopen(false);
   }
   const handleOnSubmitOrder = async () => {
-    if (payment.method === "Cash on Delivery") {
+    if (payment.method === "pm_card_visa") {
       postOrder();
     }
     getClientSecret();
   };
-  // async function retrivePaymentIntent() {
-  //   return await stripe.retrievePaymentIntent(client_secret);
-  // }
+  console.log(handleOnSubmitOrder);
+
   useEffect(() => {
     // retrivePaymentIntent();
   }, [client_secret]);

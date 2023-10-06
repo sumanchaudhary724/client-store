@@ -14,7 +14,6 @@ export const StripeCheckout = ({ clientSecret }) => {
       theme: "stripe",
     },
   };
-  console.log(StripeCheckout);
   return (
     <>
       {clientSecret && (

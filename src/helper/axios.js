@@ -247,6 +247,7 @@ export const postPaymentIntent = async (object) => {
     method: "post",
     url: stripeAPI + "/payment-intent",
     obj: object,
+    isPrivate: true,
   };
   return axiosProcessor(obj);
 };
@@ -256,6 +257,7 @@ export const payWithCard = async (object) => {
     method: "post",
     url: stripeAPI + "/checkout-with-stripe",
     obj: object,
+    isPrivate: true,
   };
   return axiosProcessor(obj);
 };
