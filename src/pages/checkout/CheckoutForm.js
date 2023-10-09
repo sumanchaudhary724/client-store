@@ -7,9 +7,6 @@ import {
 } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setModal } from "../../components/modal/modalSlice";
-import { postUserAction } from "../signin-signup/userAction";
-import { postOrderAction } from "../../pages/order/orderAction";
 const CheckoutForm = ({ clientSecret }) => {
   const { user, payment, orderItems } = useSelector((store) => store.orderInfo);
   const dispatch = useDispatch();
