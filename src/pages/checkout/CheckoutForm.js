@@ -1,70 +1,186 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Backdrop,
+  Box,
+  Button,
+  CircularProgress,
+  Typography,
+} from "@mui/material";
 import {
   AddressElement,
+  AuBankAccountElement,
   PaymentElement,
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { postOrder } from "../../helper/axios";
+import { postOrderAction } from "../../pages/order/orderAction";
+import { useNavigate } from "react-router-dom";
+import { CustomModal } from "../../components/modal/CustomModal";
+import { setModal } from "../../components/modal/modalSlice";
+const webDomain = process.env.REACT_APP_WEB_DOMAIN;
+
 const CheckoutForm = ({ clientSecret }) => {
-  const { user, payment, orderItems } = useSelector((store) => store.orderInfo);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState("");
+  const [paymentIntent, setPaymentIntent] = useState({});
+  const [client_secret, setClientSecret] = useState(
+    new URLSearchParams(window.location.search).get(
+      "payment_intent_client_secret"
+    )
+  );
+  const { user, payment, orderItems } = useSelector((store) => store.orderInfo);
+  const { modalName } = useSelector((store) => store.modalInfo);
+  async function retrivePaymentIntent() {
+    const { paymentIntent, error } = await stripe.retrievePaymentIntent(
+      clientSecret
+    );
+    if (paymentIntent?.status === "succeeded") {
+      const loading = dispatch(
+        postOrderAction({
+          user,
+          payment: { ...payment, isPaid: true },
+          orderItems,
+        })
+      );
+      const orderNumber = await loading;
+      if (orderNumber) {
+        navigate(`/cart/order/${orderNumber}`);
+      }
+    }
+    if (error) {
+      dispatch(setModal({ isModalOpen: true, modalName: "errorMessage" }));
+      setError(error);
+    }
+  }
+
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) {
       return;
     }
     if (payment.method === "afterpay_clearpay") {
+      const addressElement = elements.getElement("address");
+      const { value } = await addressElement.getValue();
+
       const { error, paymentIntent } =
         await stripe.confirmAfterpayClearpayPayment(`${clientSecret}`, {
           payment_method: {
-            billing_details: {
-              name: user.fName,
-              email: user.email,
-              address: AddressElement,
-            },
+            billing_details: { ...value, email: user.email },
           },
-          shipping: {
-            name: user.fName,
-            address: {
-              line1: "123 Main Street",
-              city: "San Francisco",
-              state: "CA",
-              country: "US",
-              postal_code: "94321",
-            },
-          },
+          shipping: value,
 
-          return_url: "http://localhost:3000/checkout",
+          return_url: webDomain + "cart/checkout/stripe",
         });
+      if (error) {
+        dispatch(setModal({ isModalOpen: true, modalName: "errorMessage" }));
+        setError(error.message);
+      }
     }
     if (payment.method === "zip") {
-      await stripe.confirm(`${clientSecret}`).then((res) => {
-        // post order
-      });
+      const { paymentIntent, error } = await stripe.confirmZipPayment(
+        `${clientSecret}`
+      );
+      if (error) {
+        console.log(error);
+        dispatch(setModal({ isModalOpen: true, modalName: "errorMessage" }));
+        setError(error);
+      }
     }
     if (payment.method === "card") {
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           // Make sure to change this to your payment completion page
-          return_url: "http://localhost:3000/checkout",
+          return_url: webDomain + "cart/checkout/stripe",
         },
       });
+      if (error) {
+        dispatch(setModal({ isModalOpen: true, modalName: "errorMessage" }));
+        setError(error?.message);
+      }
+    }
+    if (payment.method === "au_becs_debit") {
+      const { paymentIntent, error } = await stripe.confirmAuBecsDebitPayment(
+        clientSecret,
+        {
+          payment_method: {
+            au_becs_debit: {
+              bsb_number: "000000",
+              account_number: "000123456",
+            },
+            billing_details: {
+              name: "John Smith",
+              email: "john.smith@example.com",
+            },
+          },
+        }
+      );
+
+      if (paymentIntent) {
+        setPaymentIntent(paymentIntent);
+        const loading = dispatch(
+          postOrderAction({
+            user,
+            payment: { ...payment, isPaid: true },
+            orderItems,
+          })
+        );
+        const orderNumber = await loading;
+        if (orderNumber) {
+          navigate(`/cart/order/${orderNumber}`);
+        }
+      }
+      if (error) {
+        console.log(error);
+        dispatch(setModal({ isModalOpen: true, modalName: "errorMessage" }));
+        setError(error);
+      }
     }
   };
+  console.log(handleOnSubmit);
+  useEffect(() => {
+    if (!paymentIntent.id) {
+      return;
+    }
+
+    retrivePaymentIntent();
+  }, [paymentIntent]);
+  useEffect(() => {
+    if (!client_secret || !stripe) {
+      return;
+    }
+    try {
+      retrivePaymentIntent();
+    } catch (error) {
+      setError({ message: "An unexpected error occurred. Please try again." });
+    }
+  }, [client_secret, stripe]);
+
   return (
-    <Box sx={{ width: 300 }}>
+    <Box
+      sx={{
+        p: 2,
+        width: { xs: 320, sm: 450, md: 400 },
+        overflowY: "auto",
+        overflowX: "hidden",
+      }}
+    >
+      {modalName === "errorMessage" && (
+        <CustomModal title="Error">
+          <Typography variant="body" color={"error"}>
+            {error?.message}
+          </Typography>
+        </CustomModal>
+      )}
       <form
         style={{
-          width: "300px",
+          width: { xs: 300, sm: 430, md: 380 },
           height: "550px",
-          overflowY: "auto",
-          overflowX: "hidden",
         }}
       >
         <h1>Billing Details</h1>
@@ -76,12 +192,10 @@ const CheckoutForm = ({ clientSecret }) => {
           onClick={handleOnSubmit}
           fullWidth
           sx={{ mt: 2 }}
+          disabled={!orderItems.length}
         >
           Pay Now
         </Button>
-        <Typography variant="body" color={"error"}>
-          {error}
-        </Typography>
       </form>
     </Box>
   );

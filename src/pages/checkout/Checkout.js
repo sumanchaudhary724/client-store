@@ -21,18 +21,12 @@ import { StripeCheckout } from "./StripeCheckout";
 import { setModal } from "../../components/modal/modalSlice";
 import { postPaymentIntent } from "../../helper/axios";
 import { Stripe } from "@stripe/stripe-js";
-import { useStripe } from "@stripe/react-stripe-js";
-
 export const Checkout = () => {
-  const stripe = useStripe();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cart } = useSelector((store) => store.cart);
   const { payment, user, orderItems } = useSelector((store) => store.orderInfo);
 
-  const client_secret = new URLSearchParams(window.location.search).get(
-    "payment_intent_client_secret"
-  );
   const [open, setopen] = useState(false);
   const [shippingCost, setShippingCost] = useState(9.99);
   const [discount, setDiscount] = useState(19.99);
@@ -48,10 +42,10 @@ export const Checkout = () => {
       payment: payment.method,
       totalAmount,
     });
-    console.log(result);
     setClientSecret(result.clientSecret);
     if (result.clientSecret) {
-      dispatch(setModal({ isModalOpen: true, modalName: payment.method }));
+      localStorage.setItem("clientSecret", result.clientSecret);
+      navigate("/cart/checkout/stripe");
     }
   }
 
@@ -65,16 +59,11 @@ export const Checkout = () => {
     setopen(false);
   }
   const handleOnSubmitOrder = async () => {
-    if (payment.method === "pm_card_visa") {
+    if (payment.method === "Cash on Delivery") {
       postOrder();
     }
     getClientSecret();
   };
-  console.log(handleOnSubmitOrder);
-
-  useEffect(() => {
-    // retrivePaymentIntent();
-  }, [client_secret]);
 
   return (
     <UserLayout>
@@ -87,11 +76,9 @@ export const Checkout = () => {
       )}
       <Box
         sx={{
-          p: 5,
           display: "flex",
           gap: 2,
           flexDirection: { xs: "column", md: "row" },
-          backgroundColor: "#e0f2f1",
         }}
       >
         <Box
