@@ -60,7 +60,7 @@ function App() {
 
         <Route path="cart/checkout" element={<Checkout />} />
         <Route
-          path="cart/checkout/stripe"
+          path="cart/checkout"
           element={
             <PrivateRoute>
               <StripeCheckout />
