@@ -247,7 +247,6 @@ export const postPaymentIntent = async (object) => {
     method: "post",
     url: stripeAPI + "/payment-intent",
     obj: object,
-    isPrivate: true,
   };
   return axiosProcessor(obj);
 };
